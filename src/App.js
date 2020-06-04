@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import { Button, Container, Row, Column } from 'react-bootstrap';
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
@@ -55,10 +56,20 @@ function App() {
 
 
   return (
-    <div className="App">
-      {console.log("what is token",token)}
-      <button onClick={()=>getIssues()}>search</button>
-      <button onClick={()=>postNewIssue()}>post new issue</button>
+    <div>
+      <Container className="navbar">
+        <input value="text" placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button>
+      </Container>
+      <Container className="issues-area">
+      <Button onClick={()=>postNewIssue()}>Post new issue</Button>
+      <h1>Issue Title</h1>
+      <h4>Owner of Issue</h4>
+      <h4>Owner Avatar</h4>
+      <h4>When Issue was Created</h4>
+      <h4>Body of Issue</h4>
+      <h4>Label</h4>
+      <h4>State of Issue</h4>
+      </Container>
     </div>
   );
 }
