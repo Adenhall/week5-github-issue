@@ -13,15 +13,15 @@ export default function IssueList(props) {
                 return(
                     <div>
                         <Card>
-                            <Card.Header>{item.number}</Card.Header>
+                            <Card.Header>Issue no: {item.number}</Card.Header>
                             <Card.Body>
-                                <Card.Title>{item.title}</Card.Title>
+                                <Card.Title>{item.title}<Badge variant="info">{item.state}</Badge></Card.Title>
                                 <Card.Text>
-                                    <div>{item.user.login}</div>
                                     <div><img width="60" src={item.user.avatar_url}/></div>
+                                    <div>{item.user.login}</div>
                                     <div>{item.user.body}</div>
                                     <Badge style={{"background-color":`#${item.labels[0].color}`}}>{item.labels[0].description}</Badge>
-                                    <Badge variant="info">{item.state}</Badge>   
+                                    
                                 </Card.Text>
                             </Card.Body>
                         </Card>

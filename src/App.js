@@ -95,17 +95,22 @@ let changeCurrentPage=(pageNumber)=>{
 
   return (
   <div>
+    <Navbar bg="dark" variant="dark">
     <div>
-    <h1>Github Issues</h1>
-  </div>
-    <div>{console.log("what is token?", token)}
+    <h4>Github Issues</h4>
+    </div>
     <Form inline>
       <FormControl type="text" placeholder="Format: Owner/Repo" className="mr-sm-2" onChange={(e)=>searchIssue=e.target.value} />
       
-      <Button variant="outline-success" onClick={()=>getIssues()}>Search</Button>
-      <Button variant="outline-success" onClick={()=> postIssues()}>Post</Button>
+      <Button className="button" variant="outline-light" onClick={()=>getIssues()}>Search</Button>
+      <Button className="button" variant="outline-light" onClick={()=> postIssues()}>Post</Button>
     
     </Form>
+
+    </Navbar>
+    
+    <div>{console.log("what is token?", token)}
+   
 
     
     
@@ -114,7 +119,7 @@ let changeCurrentPage=(pageNumber)=>{
   <IssueList list={issues}></IssueList>
   
   </div>
-    <Navbar className="nav3" bg="light" expand="sm" fixed="bottom">
+    <Navbar className="nav" bg="light" expand="sm" fixed="bottom">
         <Pagination 
               currentPage={pageNumber}
               totalPages={total}

@@ -1,0 +1,23 @@
+
+.nav3{
+    margin-top:69px;
+    font-size: 20px;
+    height: 60px;
+   
+    align-items: center;
+  }
+
+  h4{
+     font-size: 25px;
+        color: white;
+     
+  }
+
+  nav{
+      height:50px;
+  }
+
+.button{
+    background-color: transparent;
+   margin-right: 2rem;
+}
