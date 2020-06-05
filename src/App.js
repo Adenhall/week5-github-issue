@@ -74,11 +74,11 @@ function App() {
 						})}
 					</ul>
 				</Container>
-				<Container className="issues-area">
-					<Button onClick={() => postNewIssue()}>Post new issue</Button>
-				</Container>
 			</div>
 		);
+	else if (dataList === null) {
+		alert("repository does not exist");
+	}
 }
 
 export default App;
