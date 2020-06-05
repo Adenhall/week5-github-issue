@@ -79,8 +79,9 @@ function App() {
   }
 
   const submitNewIssue = async() => {
-    const issue = { title: {newIssueTitle}, body: {newIssueBody} }; // made this as object type to change to json
-    const url = `http://api.github.com/repos/christinapbui/GithubIssues/issues`;
+    const issue = { title: newIssueTitle, body: newIssueBody }; // made this as object type to change to json
+    console.log(issue);
+    const url = `https://api.github.com/repos/christinapbui/GithubIssues/issues`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -88,9 +89,13 @@ function App() {
         Authorization: `token ${token}`
       },
       body: JSON.stringify(issue)
-    });
-    console.log("response?",response)
+    }); 
+    closeModal()
   }
+
+//   const openTitleModal = () => {
+//     setTitleModal(true)
+// }
 
   
 if (errorIssues)
