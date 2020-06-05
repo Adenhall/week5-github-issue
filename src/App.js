@@ -1,19 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import { Button, Container, Row, Column } from 'react-bootstrap';
-import Navbarsearchresult from "./components/Navbarsearchresult"
-const clientId = `208bd684988074b62c9e`;
+import IssuesInfo from './components/IssuesInfo.js'
+import HieuFooter from './components/Footer.js'
+import Modal2 from "./components/Modal.js"
+const clientId = process.env.REACT_APP_CLIENT_ID;
 
 function App() {
-  /*const [userSearch,setUserSearch] = useState("")
-  const [respoSearch,setRespoSearch] = useState("")
-  const [issueList,setIssueList] = useState([])
-  const [currentPage,setCurrentPage] = useState(1)
-  const token =`82c3975b1e61d3a533985ddbc45c880f30931e19` */
- /* const postNewIssue = async() => {
+  const [token,setToken] = useState(null)
+  const [issuesList, setIssuesList] = useState([])
+
+  const getToken = () => {
+    const existingToken = localStorage.getItem('token'); // if we already have token in our localstorage, just get that
+    const accessToken = (window.location.search.split("=")[0] === "?access_token") ? window.location.search.split("=")[1].split("&")[0] : null; // reads the token value from body (url)
+
+    if (!accessToken && !existingToken) {
+      window.location.replace(`http://github.com/login/oauth/authorize?scope=user:email,repo&client_id=${clientId}`)
+    }
+
+    if (accessToken) { // A.1 if you get token value from url
+      console.log(`New accessToken: ${accessToken}`);
+
+      localStorage.setItem("token", accessToken); // A.2 save it to localStorage
+      setToken(accessToken) // A.3 and set the state
+    }
+
+    if (existingToken) { // A.4 if you have token on your localStorage already
+      setToken(existingToken)
+    }
+  }
+
+  const postNewIssue = async() => {
     // const issue = { title: title, body: details }; // made this as object type to change to json
     const issue = { title: "title", body: "details" }; 
-    const url = `https://api.github.com/repos/christinapbui/GithubIssues/issues`;
+    const url = `http://api.github.com/repos/christinapbui/GithubIssues/issues`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -23,62 +43,37 @@ function App() {
       body: JSON.stringify(issue)
     });
     console.log("response?",response)
-  } // how to make a new issue */
+  } // how to make a new issue
 
   useEffect(()=>{
-    getIssues()
+    getToken()
   },[])
-  //const searchUserInput = (input) => {
-    //setUserSearch(input.target.value) 
-  //}
-  //const searchRespoInput = (input) => {
-    //setRespoSearch(input.target.value) 
-  //}
- /*const getQuerryIssue = async() => {
-    const { respoSearch, userSearch, issueList, currentPage} = this.state 
-    if({userSearch}==="" || {respoSearch} ===""){
-      return alert("Invalid Input");
-    } 
-    let rawString1;
-
-    let response = await fetch(
-      `http://api.github.com/repos/${userSearch}/${respoSearch}/issues?page=1`
-    );
-
-    let jsonData = await response.json();
-    setIssueList(jsonData)
-    respoSearch("")
-    userSearch("")
-  }    */
-  /*const getIssues = async() => {
-    let url = `https://api.github.com/repos/facebook/react/issues`
+      
+  const getIssues = async() => {
+    const owner = "facebook", repo="react";
+    let url = `http://api.github.com/repos/${owner}/${repo}/issues`
     let data = await fetch(url)
-    let result = await data.json()
-    console.log("result?",result)
+    let dataResult = await data.json()
+    console.log("result?",dataResult)
+    setIssuesList(dataResult)
   } // this is how to get the data
-*/
+
 
 
   return (
     <div>
       <Container className="navbar">
-        <input value="text" placeholder="Search here..."></input>
-        <input value="text" placeholder="Search here..."></input>
-        <Button onClick={()=>getQueryIssue()}
-               // onUserSearchButton={(input)=>searchUserInput(input)}
-                //onRespoSearchButton={(input)=>searchRespoInput(input)}
-                >search</Button>
+        {/* <input value="text" placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button> */}
       </Container>
       <Container className="issues-area">
+      <button onClick={()=>getIssues()}>Get issues</button>
       <Button onClick={()=>postNewIssue()}>Post new issue</Button>
-      <h1>Issue Title</h1>
-      <h4>Owner of Issue</h4>
-      <h4>Owner Avatar</h4>
-      <h4>When Issue was Created</h4>
-      <h4>Body of Issue</h4>
-      <h4>Label</h4>
-      <h4>State of Issue</h4>
+      <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
       </Container>
+    
+      <div >
+      <HieuFooter />
+      </div>
     </div>
   );
 }

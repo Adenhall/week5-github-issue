@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Modal2 from "./components/Modal.js"
-
+import "./css/footer.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 export default class CreateNewIssue extends Component {
     constructor(props){

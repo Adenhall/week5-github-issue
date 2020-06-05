@@ -1,0 +1,16 @@
+.card-img-top {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  div.markdown,
+  div.markdown img {
+    max-width: 90%;
+    min-width: 90%;
+    width: 90%
+  }
+  
+  .avataimg {
+    border: 1px solid #17a2b8;
+  }
+  
