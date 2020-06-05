@@ -1,32 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import { Button, Container, Row, Column } from 'react-bootstrap';
-
-const clientId = process.env.REACT_APP_CLIENT_ID;
+import Navbarsearchresult from "./components/Navbarsearchresult"
+const clientId = `208bd684988074b62c9e`;
 
 function App() {
-  const [token,setToken] = useState(null)
-
-  const getToken = () => {
-    const existingToken = localStorage.getItem('token'); // if we already have token in our localstorage, just get that
-    const accessToken = (window.location.search.split("=")[0] === "?access_token") ? window.location.search.split("=")[1].split("&")[0] : null; // reads the token value from body (url)
-
-    if (!accessToken && !existingToken) {
-      window.location.replace(`https://github.com/login/oauth/authorize?scope=user:email,repo&client_id=${clientId}`)
-    }
-
-    if (accessToken) { // A.1 if you get token value from url
-      console.log(`New accessToken: ${accessToken}`);
-
-      localStorage.setItem("token", accessToken); // A.2 save it to localStorage
-      setToken(accessToken) // A.3 and set the state
-    }
-
-    if (existingToken) { // A.4 if you have token on your localStorage already
-      setToken(existingToken)
-    }
-  }
-
+  const [userSearch,setUserSearch] = useState("")
+  const [respoSearch,setRespoSearch] = useState("")
+  const [issueList,setIssueList] = useState([])
+  const [currentPage,setCurrentPage] = useState(1)
+  const token =`82c3975b1e61d3a533985ddbc45c880f30931e19`
   const postNewIssue = async() => {
     // const issue = { title: title, body: details }; // made this as object type to change to json
     const issue = { title: "title", body: "details" }; 
@@ -43,9 +26,30 @@ function App() {
   } // how to make a new issue
 
   useEffect(()=>{
-    getToken()
+    getIssues()
   },[])
-      
+  const searchUserInput = (input) => {
+    setUserSearch(input.target.value) 
+  }
+  const searchRespoInput = (input) => {
+    setRespoSearch(input.target.value) 
+  }
+ const getQuerryIssue = async() => {
+    const { respoSearch, userSearch, issueList, currentPage} = this.state 
+    if({userSearch}==="" || {respoSearch} ===""){
+      return alert("Invalid Input");
+    } 
+    let rawString1;
+
+    let response = await fetch(
+      `http://api.github.com/repos/${userSearch}/${respoSearch}/issues?page=1`
+    );
+
+    let jsonData = await response.json();
+    setIssueList(jsonData)
+    respoSearch("")
+    userSearch("")
+  }    
   const getIssues = async() => {
     let url = `https://api.github.com/repos/facebook/react/issues`
     let data = await fetch(url)
@@ -58,7 +62,12 @@ function App() {
   return (
     <div>
       <Container className="navbar">
-        <input value="text" placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button>
+        <input value="text" placeholder="Search here..."></input>
+        <input value="text" placeholder="Search here..."></input>
+        <Button onClick={()=>getQueryIssue()}
+                onUserSearchButton={(input)=>searchUserInput(input)}
+                onRespoSearchButton={(input)=>searchRespoInput(input)}
+                >search</Button>
       </Container>
       <Container className="issues-area">
       <Button onClick={()=>postNewIssue()}>Post new issue</Button>
