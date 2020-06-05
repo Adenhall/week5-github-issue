@@ -58,7 +58,7 @@ function App() {
   return (
     <div>
       <Container className="navbar">
-        <input value="text" placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button>
+        <input placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button>
       </Container>
       <Container className="issues-area">
       <Button onClick={()=>postNewIssue()}>Post new issue</Button>
