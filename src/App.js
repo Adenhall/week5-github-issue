@@ -6,6 +6,8 @@ import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
+let newIssueTitle = ""
+let newIssueBody = ""
 
 function App() {
   const [token,setToken] = useState(null)
@@ -32,19 +34,7 @@ function App() {
     }
   }
 
-  const postNewIssue = async() => {
-    // const issue = { title: title, body: details }; // made this as object type to change to json
-    const issue = { title: "title", body: "details" }; 
-    const url = `http://api.github.com/repos/christinapbui/GithubIssuesV2/issues`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `token ${token}`
-      },
-      body: JSON.stringify(issue)
-    });
-    console.log("response?",response)
+  const postNewIssue = () => {
     setOpenModal(true)
     console.log("open modal?",openModal)
   } // how to make a new issue
@@ -62,8 +52,22 @@ function App() {
     setIssuesList(dataResult)
   } // this is how to get the data
 
-  const closeModal = () =>{
+  const closeModal = () => {
     setOpenModal(false)
+  }
+
+  const submitNewIssue = async() => {
+    const issue = { title: {newIssueTitle}, body: {newIssueBody} }; // made this as object type to change to json
+    const url = `http://api.github.com/repos/christinapbui/GithubIssues/issues`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `token ${token}`
+      },
+      body: JSON.stringify(issue)
+    });
+    console.log("response?",response)
   }
 
 
@@ -77,6 +81,7 @@ function App() {
       <Button variant="primary" onClick={()=>getIssues()}>Get issues</Button>
       <ReactModal
         className="video-popup-modal" 
+        ariaHideApp={false}
         isOpen={openModal}
         onRequestClose={()=>closeModal()}
           closeTimeOutMS={2000}
@@ -105,7 +110,14 @@ function App() {
               padding: '20px'
             }
           }}>
-        Post new content here <Button onClick={()=>closeModal()}></Button>
+        <Button onClick={()=>closeModal()}>Close</Button>
+        <div>New Issue: <input type="text" placeholder="Title" onChange={(e)=>{newIssueTitle=e.target.value}}></input></div>
+        <div>Owner of Issue: (get author of post here)</div>
+        <div>Owner Avatar</div>
+        <div>What's the Issue? <textarea placeholder="Leave a comment" rows="10" cols="30" onChange={(e)=>{newIssueBody=e.target.value}}></textarea></div>
+        <div>Label: (dropdown - select label)</div>
+        <div>State of Issue: (dropdown - select state)</div>
+        <Button onClick={()=>submitNewIssue()}>Submit new issue</Button>
       </ReactModal>
       <Button variant="success" onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
