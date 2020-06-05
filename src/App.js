@@ -15,9 +15,10 @@ let newIssueBody = ""
 let inputString= ""
 
 function App() {
-  const [token,setToken] = useState(null)
-  const [issuesList,setIssuesList] = useState([])
-  const [openModal,setOpenModal] = useState(false)
+  let searchIssue = ''
+  let [issues,setIssues] = useState(null);
+  const [token,setToken] = useState(null);
+ 
   let [pageNumber, setPageNumber] = useState(1)
   let [total,setTotalPages]=useState(null)
   let [errorIssues, setErrorIssues]= useState(false)
