@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import { Button, Container, Row, Column } from 'react-bootstrap';
 import IssuesInfo from './components/IssuesInfo.js'
-
+import HieuFooter from './components/Footer.js'
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
 function App() {
@@ -70,6 +70,10 @@ function App() {
       <Button onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
       </Container>
+    
+      <div >
+      <HieuFooter />
+      </div>
     </div>
   );
 }
