@@ -5,15 +5,23 @@ import Button from 'react-bootstrap/Button'
 import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
 import HieuFooter from './components/Footer.js'
+import Navbar from 'react-bootstrap/Navbar'
+import Pagination from "react-pagination-library";
+
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 let newIssueTitle = ""
 let newIssueBody = ""
+let inputString= ""
 
 function App() {
   const [token,setToken] = useState(null)
   const [issuesList,setIssuesList] = useState([])
   const [openModal,setOpenModal] = useState(false)
+  let [pageNumber, setPageNumber] = useState(1)
+  let [total,setTotalPages]=useState(null)
+  let [errorIssues, setErrorIssues]= useState(false)
+  let [fullList, setFullList] = useState([])
 
   const getToken = () => {
     const existingToken = localStorage.getItem('token'); // if we already have token in our localstorage, just get that
@@ -44,14 +52,27 @@ function App() {
     getToken()
   },[])
       
-  const getIssues = async() => {
-    const owner = "facebook", repo="react";
-    let url = `http://api.github.com/repos/${owner}/${repo}/issues`
+  const getIssues = async(owner,repo,pageNumber) => {
+    let tempArray = inputString.split('/')
+    owner = tempArray[0]
+    repo = tempArray[1]
+    let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${pageNumber}&per_page=30`
     let data = await fetch(url)
     let dataResult = await data.json()
     console.log("result?",dataResult)
-    setIssuesList(dataResult)
+    setFullList(dataResult)
+    setIssuesList(getListToDisplay(dataResult,0))
+    
+    if (issuesList === ''){
+      setErrorIssues(true)
+     }
+     setTotalPages((dataResult.length)/10)
+   
   } // this is how to get the data
+
+  const getListToDisplay = (result, page) => {
+    return result.filter((x, index) => index >= page * 10 && index < (page+1)*10)
+  }
 
   const closeModal = () => {
     setOpenModal(false)
@@ -71,13 +92,23 @@ function App() {
     console.log("response?",response)
   }
 
+  
+if (errorIssues)
+{
+  return <div>No Issues Found</div>
+}
+let changeCurrentPage=(pageNumber)=>{
+  let a = getListToDisplay(fullList, pageNumber-1)
+  setPageNumber(pageNumber)
+  setIssuesList(a)
+}
 
 
   return (
     <div>
       <Container className="navbar">
 
-        <input placeholder="Search here..."></input><Button onClick={()=>getIssues()}>search</Button>
+  <input placeholder="Search here..."onChange={(e) => inputString = e.target.value}></input><Button onClick={()=>getIssues()}>search</Button>
       </Container>
       <Container className="issues-area">
       <Button variant="primary" onClick={()=>getIssues()}>Get issues</Button>
@@ -124,7 +155,15 @@ function App() {
       <Button variant="success" onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
       </Container>
-    
+      <Navbar className="nav" bg="light" expand="sm" fixed="bottom">
+        <Pagination 
+              currentPage={pageNumber}
+              totalPages={total}
+              changeCurrentPage={changeCurrentPage}
+              theme="bottom-border"
+            /> 
+
+      </Navbar>
       <div >
       <HieuFooter />
       </div>
