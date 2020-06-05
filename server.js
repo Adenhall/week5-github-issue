@@ -10,7 +10,7 @@ console.log('started server on port 5000');
 http.createServer((req, res) => {
   var code = req.url.split("=")[1];
   if (code) {
-    request.post('https://github.com/login/oauth/access_token', {
+    request.post('http://github.com/login/oauth/access_token', {
       form: {
         client_id: clientId,
         client_secret: secretKey,
@@ -18,7 +18,7 @@ http.createServer((req, res) => {
       }
     }, (err, r, body) => {
       res.writeHead(301, {
-        'Location': 'http://localhost:3000?' + body
+        'Location': 'http://localhost:3000?' + body // client URL
       });
       res.end();
     })
@@ -27,4 +27,4 @@ http.createServer((req, res) => {
     res.writeHead(404);
     res.end();
   }
-}).listen(5001);
+}).listen(5000); // server port number

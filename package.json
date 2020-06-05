@@ -1,5 +1,5 @@
 {
-  "name": "github",
+  "name": "w5-group-project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,9 +7,14 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
+    "moment": "^2.26.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-js-pagination": "^3.0.3",
+    "react-markdown": "^4.3.1",
+    "react-modal": "^3.11.2",
+    "react-moment": "^0.9.7",
     "react-pagination-library": "^0.1.14",
     "react-scripts": "3.4.1"
   },
