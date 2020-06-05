@@ -4,6 +4,7 @@ import { Container, Row, Column } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
+import HieuFooter from './components/Footer.js'
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 let newIssueTitle = ""
@@ -122,6 +123,10 @@ function App() {
       <Button variant="success" onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
       </Container>
+    
+      <div >
+      <HieuFooter />
+      </div>
     </div>
   );
 }

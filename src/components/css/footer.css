@@ -1,0 +1,11 @@
+.footer-list {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0px !important;
+}
+
+.footer-list li {
+    padding: 0 10px;
+    font-size: 12px;
+}
