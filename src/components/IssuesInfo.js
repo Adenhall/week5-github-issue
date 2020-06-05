@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge, Container, Row } from 'react-bootstrap';
 import moment from 'moment'
-
+import ReactMarkdown from 'react-markdown';
 export default function IssuesInfo(props) {
 
 
@@ -23,7 +23,8 @@ export default function IssuesInfo(props) {
                     <div>Owner of Issue: {item.user.login} <img src={item.user.avatar_url} width="40" height="40"/></div>
                     <div>Issue created on: {moment(item.created_at).startOf('day').fromNow()}</div>
                     <div>Body: 
-                        <br />{item.body}</div>
+                        <br />
+                        <ReactMarkdown source= {item.body}/></div>
                     <div>Label {item.labels.map(label => <Badge pill variant="primary">{label.name}</Badge>)}</div>
                     <div>State of Issue</div>
                 </div>
