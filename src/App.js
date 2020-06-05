@@ -1,10 +1,27 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import IssueList from './components/IssueList.js'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Pagination from "react-pagination-library";
+import "react-pagination-library/build/css/index.css"; 
+import {Form, FormControl, Button} from 'react-bootstrap';
+import {Navbar, Nav, Collapse, NavDropdown} from 'react-bootstrap';
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
 function App() {
+  let searchIssue = ''
+  let [issues,setIssues] = useState(null);
   const [token,setToken] = useState(null);
+ 
+  let [searchIssues, setSearchIssues] = useState(null)
+  let [pageNumber, setPageNumber] = useState(1)
+  let [total,setTotalPages]=useState(null)
+  let [errorIssues, setErrorIssues]= useState(false)
+  let [fullList, setFullList] = useState([])
+  let owner = ''
+  let repo = ''
+  
 
   const getToken = () =>{
   const existingToken = localStorage.getItem('token');
@@ -28,33 +45,84 @@ function App() {
   }
 };
 
-const getIssues = async(owner,repo) => {
+const getIssues = async(owner,repo,pageNumber) => {
+  let newArray = searchIssue.split('/') 
+  owner = newArray[0]
+  repo = newArray[1]
   console.log("let's get physical")
-  let url = `https://api.github.com/repos/:${owner}/:${repo}/issues`
+  let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${pageNumber}&per_page=30`
   let data = await fetch(url)
   let result = await data.json()
-  console.log("result", result)
+  // console.log("result", result)
+  setFullList(result)
+  setIssues(getListToDisplay(result,0))
+  
+  // console.log(searchIssue)
+  if (searchIssue === ''){
+   setErrorIssues(true)
+  }
+  setTotalPages((result.length)/10)
 
+}
+
+const getListToDisplay = (result, page) => {
+  return result.filter((x, index) => index >= page * 10 && index < (page+1)*10)
 }
 
 
 const postIssues = ()=>{
+  // console.log(issues)
+  
 
 }
+
+
 
 useEffect(()=>{
   getToken()
 },[])
 
+if (errorIssues)
+{
+  return <div>No Issues Found</div>
+}
+let changeCurrentPage=(pageNumber)=>{
+  let a = getListToDisplay(fullList, pageNumber-1)
+  setPageNumber(pageNumber)
+  setIssues(a)
+ 
+}
+
   return (
   <div>
     <div>
-    nav nav nav
+    <h1>Github Issues</h1>
   </div>
     <div>{console.log("what is token?", token)}
-    <button onClick={()=>getIssues}>search</button>
-    <button onClick={()=> postIssues}>post</button>
+    <Form inline>
+      <FormControl type="text" placeholder="Format: Owner/Repo" className="mr-sm-2" onChange={(e)=>searchIssue=e.target.value} />
+      
+      <Button variant="outline-success" onClick={()=>getIssues()}>Search</Button>
+      <Button variant="outline-success" onClick={()=> postIssues()}>Post</Button>
+    
+    </Form>
+
+    
+    
     </div>
+  <div>
+  <IssueList list={issues}></IssueList>
+  
+  </div>
+    <Navbar className="nav3" bg="light" expand="sm" fixed="bottom">
+        <Pagination 
+              currentPage={pageNumber}
+              totalPages={total}
+              changeCurrentPage={changeCurrentPage}
+              theme="bottom-border"
+            /> 
+
+    </Navbar>
 
   </div>
   
