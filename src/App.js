@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import { Container, Row, Column } from 'react-bootstrap';
+import { Container, Row, Column,Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
@@ -15,15 +15,15 @@ let newIssueBody = ""
 let inputString= ""
 
 function App() {
-  let searchIssue = ''
-  let [issues,setIssues] = useState(null);
   const [token,setToken] = useState(null);
- 
-  let [pageNumber, setPageNumber] = useState(1)
-  let [total,setTotalPages]=useState(null)
-  let [errorIssues, setErrorIssues]= useState(false)
-  let [fullList, setFullList] = useState([])
-
+  const [issuesList,setIssuesList] = useState([]);
+  const [openModal,setOpenModal] = useState(false);
+  let [pageNumber, setPageNumber] = useState(1);
+  let [total,setTotalPages]=useState(null);
+  let [errorIssues, setErrorIssues]= useState(false);
+  let [fullList, setFullList] = useState([]);
+  const [showAlert,setShowAlert] = useState (false);
+  
   const getToken = () => {
     const existingToken = localStorage.getItem('token'); // if we already have token in our localstorage, just get that
     const accessToken = (window.location.search.split("=")[0] === "?access_token") ? window.location.search.split("=")[1].split("&")[0] : null; // reads the token value from body (url)
@@ -80,7 +80,12 @@ function App() {
   }
 
   const submitNewIssue = async() => {
-    const issue = { title: {newIssueTitle}, body: {newIssueBody} }; // made this as object type to change to json
+    const issue = { title: {newIssueTitle}, body: {newIssueBody} }; 
+    if (newIssueTitle.length == 0 || newIssueBody.length == 0){
+     setShowAlert (true)
+     return;
+    }
+    // made this as object type to change to json
     const url = `http://api.github.com/repos/christinapbui/GithubIssues/issues`;
     const response = await fetch(url, {
       method: "POST",
@@ -91,6 +96,7 @@ function App() {
       body: JSON.stringify(issue)
     });
     console.log("response?",response)
+
   }
 
   
@@ -107,9 +113,17 @@ let changeCurrentPage=(pageNumber)=>{
 
   return (
     <div>
+    <Navbar bg="dark"><h3>Github Issues</h3></Navbar>
+    <Pagination className="pagination"
+              currentPage={pageNumber}
+              totalPages={total}
+              changeCurrentPage={changeCurrentPage}
+              theme="bottom-border"
+            /> 
+   
       <Container className="navbar">
 
-  <input placeholder="Search here..."onChange={(e) => inputString = e.target.value}></input><Button onClick={()=>getIssues()}>search</Button>
+        <input placeholder="User/Repo Name"onChange={(e) => inputString = e.target.value}></input><Button onClick={()=>getIssues()}>search</Button>
       </Container>
       <Container className="issues-area">
       <Button variant="primary" onClick={()=>getIssues()}>Get issues</Button>
@@ -152,22 +166,30 @@ let changeCurrentPage=(pageNumber)=>{
         <div>Label: (dropdown - select label)</div>
         <div>State of Issue: (dropdown - select state)</div>
         <Button onClick={()=>submitNewIssue()}>Submit new issue</Button>
+       
+        {
+      (showAlert) ? 
+      <div>
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+        <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          <p>
+            Change this and that and try again. Duis mollis, est non commodo
+            luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+            Cras mattis consectetur purus sit amet fermentum.
+          </p>
+        </Alert>
+      </div>
+    : null
+    }
       </ReactModal>
       <Button variant="success" onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
       </Container>
-      <Navbar className="nav" bg="light" expand="sm" fixed="bottom">
-        <Pagination 
-              currentPage={pageNumber}
-              totalPages={total}
-              changeCurrentPage={changeCurrentPage}
-              theme="bottom-border"
-            /> 
-
-      </Navbar>
-      <div >
+      
+     
+      <Navbar fixed="bottom">
       <HieuFooter />
-      </div>
+      </Navbar>
     </div>
   );
 }

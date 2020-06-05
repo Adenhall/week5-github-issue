@@ -1,5 +1,6 @@
 .issueslist-per-issue{
   border: 1px solid black;
+  margin: 20px;
 }
 
 .nav{
@@ -10,17 +11,23 @@
   align-items: center;
 }
 
-h4{
-   font-size: 25px;
-      color: white;
+h3{
+  color: white;
    
 }
 
 nav{
     height:50px;
+    width: auto;
 }
 
 .button{
-  background-color: transparent;
+background-color: transparent;
  margin-right: 2rem;
+}
+
+.pagination{
+  display: flex;
+  flex-direction: column;
+  list-style: none
 }
