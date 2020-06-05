@@ -14,14 +14,10 @@ function App() {
   let [issues,setIssues] = useState(null);
   const [token,setToken] = useState(null);
  
-  let [searchIssues, setSearchIssues] = useState(null)
   let [pageNumber, setPageNumber] = useState(1)
   let [total,setTotalPages]=useState(null)
   let [errorIssues, setErrorIssues]= useState(false)
   let [fullList, setFullList] = useState([])
-  let owner = ''
-  let repo = ''
-  
 
   const getToken = () =>{
   const existingToken = localStorage.getItem('token');
