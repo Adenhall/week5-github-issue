@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import { Container, Row, Column } from 'react-bootstrap';
+import { Container, Row, Column, Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
@@ -22,6 +22,7 @@ function App() {
   let [total,setTotalPages]=useState(null)
   let [errorIssues, setErrorIssues]= useState(false)
   let [fullList, setFullList] = useState([])
+  let [showAlert, setShowAlert] = useState(false)
 
   const getToken = () => {
     const existingToken = localStorage.getItem('token'); // if we already have token in our localstorage, just get that
@@ -79,7 +80,13 @@ function App() {
   }
 
   const submitNewIssue = async() => {
-    const issue = { title: newIssueTitle, body: newIssueBody }; // made this as object type to change to json
+    const issue = { title: {newIssueTitle}, body: {newIssueBody} }; 
+    if (newIssueTitle.length === 0 || newIssueBody.length === 0){
+     setShowAlert (true)
+     return;
+    }
+
+    // const issue = { title: newIssueTitle, body: newIssueBody }; // made this as object type to change to json
     console.log(issue);
     const url = `https://api.github.com/repos/christinapbui/GithubIssues/issues`;
     const response = await fetch(url, {
@@ -111,6 +118,7 @@ let changeCurrentPage=(pageNumber)=>{
 
   return (
     <div>
+      <Navbar bg="dark"><h3>Github Issues</h3></Navbar>
       <Container className="navbar">
 
   <input placeholder="Search here..."onChange={(e) => inputString = e.target.value}></input><Button onClick={()=>getIssues()}>search</Button>
@@ -156,6 +164,20 @@ let changeCurrentPage=(pageNumber)=>{
         <div>Label: (dropdown - select label)</div>
         <div>State of Issue: (dropdown - select state)</div>
         <Button onClick={()=>submitNewIssue()}>Submit new issue</Button>
+        {
+      (showAlert) ? 
+      <div>
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+        <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          <p>
+            Change this and that and try again. Duis mollis, est non commodo
+            luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+            Cras mattis consectetur purus sit amet fermentum.
+          </p>
+        </Alert>
+      </div>
+    : null
+    }
       </ReactModal>
       <Button variant="success" onClick={()=>postNewIssue()}>Post new issue</Button>
       <IssuesInfo issuesListProps = {issuesList} getIssuesProps = {getIssues}/>
