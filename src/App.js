@@ -118,6 +118,7 @@ let changeCurrentPage=(pageNumber)=>{
 
   return (
     <div>
+      <Navbar bg="dark"><h3>Github Issues</h3></Navbar>
       <Container className="navbar">
 
   <input placeholder="Search here..."onChange={(e) => inputString = e.target.value}></input><Button onClick={()=>getIssues()}>search</Button>
