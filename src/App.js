@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import { Container, Row, Column } from 'react-bootstrap';
+import { Container, Row, Column, Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import IssuesInfo from './components/IssuesInfo.js'
 import ReactModal from 'react-modal'
@@ -81,7 +81,7 @@ function App() {
 
   const submitNewIssue = async() => {
     const issue = { title: {newIssueTitle}, body: {newIssueBody} }; 
-    if (newIssueTitle.length == 0 || newIssueBody.length == 0){
+    if (newIssueTitle.length === 0 || newIssueBody.length === 0){
      setShowAlert (true)
      return;
     }
