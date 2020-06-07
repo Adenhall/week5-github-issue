@@ -11,12 +11,9 @@
   align-items: flex-end;
 }
 
-.nav{
-  margin-top:69px;
+.navbar{
   font-size: 20px;
   height: 60px;
- 
-  align-items: center;
 }
 
 h4{
@@ -39,14 +36,14 @@ h3 {
   text-decoration: none;
 }
 
+.exclamation {
+  background-color: white;
+  border: olivedrab;
+}
+
 nav{
     height:50px;
 }
-/* .pagination{
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-} */
 
 .button{
   background-color: transparent;

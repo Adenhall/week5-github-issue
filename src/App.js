@@ -7,6 +7,7 @@ import ReactModal from "react-modal";
 import HieuFooter from "./components/Footer.js";
 import Navbar from "react-bootstrap/Navbar";
 import Pagination from "react-pagination-library";
+import "react-pagination-library/build/css/index.css";
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 let newIssueTitle = "";
@@ -125,16 +126,17 @@ function App() {
 
   return (
     <div>
-      <Navbar bg="dark">
+      <Navbar bg="dark" className="d-flex justify-content-between">
         <h3>Github Issues</h3>
+        <div>
+          <input
+            placeholder="Search here..."
+            onChange={(e) => (inputString = e.target.value)}
+          ></input>
+          <Button style={{marginBottom: "5px"}} onClick={() => getIssues()}>search</Button>
+        </div>
+        
       </Navbar>
-      <Container className="navbar">
-        <input
-          placeholder="Search here..."
-          onChange={(e) => (inputString = e.target.value)}
-        ></input>
-        <Button onClick={() => getIssues()}>search</Button>
-      </Container>
       <Container className="issues-area">
         <ReactModal
           className="video-popup-modal"
@@ -213,12 +215,10 @@ function App() {
             </div>
           ) : null}
         </ReactModal>
-        <Button style={{width: "100px"}} variant="success" onClick={() => postNewIssue()}>
-          New issue
-        </Button>
-        <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} />
+        
+        <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />
       </Container>
-      <Navbar className="nav" bg="light" expand="sm" fixed="bottom">
+      <Navbar className="nav justify-content-center" bg="light" expand="sm" fixed="bottom">
         <Pagination
           currentPage={pageNumber}
           totalPages={total}
