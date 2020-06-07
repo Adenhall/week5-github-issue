@@ -4,7 +4,7 @@ import moment from 'moment'
 import TitleModal from './TitleModal.js'
 import Button from "react-bootstrap/Button";
 import ReactMarkdown from 'react-markdown';
-
+import Accordion from "react-bootstrap"
 
 export default function IssuesInfo(props) {
     let [titleModal, setTitleModal] = useState(false)
@@ -37,8 +37,18 @@ export default function IssuesInfo(props) {
                                 </div>
                                 <div style={{margin: "10px 10px"}} className="d-flex flex-column align-items-end"><img src={item.user.avatar_url} width="40" height="40" /><div><b>State: {item.state.toUpperCase()}</b></div></div>
                                 
-                                <ReactMarkdown source={item.body} />
+                                
                             </div>
+                    <Accordion>
+                    <Card.Text>
+                      <Accordion.Toggle as={Button} variant="link" eventKey="0" style={{ paddingLeft: 0 }}>
+                        Show Body Text
+                    </Accordion.Toggle>
+                      <Accordion.Collapse className="markdown" eventKey="0">
+                        <ReactMarkdown source={item.body} />
+                      </Accordion.Collapse>
+                    </Card.Text>
+                  </Accordion>
                             <TitleModal item={item} titleModalProps={titleModal} closeTitleModalProps={closeTitalModal}/>
                             </>
                     )
