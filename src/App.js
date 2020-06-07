@@ -8,6 +8,7 @@ import HieuFooter from "./components/Footer.js";
 import Navbar from "react-bootstrap/Navbar";
 import Pagination from "react-pagination-library";
 import Dropdown from 'react-bootstrap/Dropdown'
+import Card from 'react-bootstrap/Card'
 import "react-pagination-library/build/css/index.css";
 
 
@@ -60,6 +61,10 @@ function App() {
     console.log("open modal?", openModal);
   }; // how to make a new issue
 
+  const resetPage = () => {
+    window.location.reload()
+  }
+
   useEffect(() => {
     getToken();
   }, []);
@@ -73,25 +78,32 @@ function App() {
     let dataResult = await data.json();
     console.log("result?", dataResult);
     setFullList(dataResult);
-    setIssuesList(getListToDisplay(dataResult, 0));
-    let c = []
-    let b = dataResult.map(item=>{
-      console.log(item.labels)
-      c = c.concat(item.labels)
-      return item.labels
-    }) 
-    console.log("b is", c)
-    setLabelList(c)
-    try {
-    } catch (error) {}
+    if (dataResult.message == "Not Found") {
+      setIssuesList([])
+      alert("No Data Found")
+    } else {
+      setIssuesList(getListToDisplay(dataResult, 0));
+      let c = []
+      let b = dataResult.map(item => {
+        console.log(item.labels)
+        c = c.concat(item.labels)
+        return item.labels
+      })
+      console.log("b is", c)
+      setLabelList(c)
+      try {
+      } catch (error) { }
 
-    if (issuesList === "") {
-      setErrorIssues(true);
+      if (issuesList === "") {
+        setErrorIssues(true);
+      }
+      setTotalPages(dataResult.length / 10);
     }
-    setTotalPages(dataResult.length / 10);
+
   }; // this is how to get the data
 
   const getListToDisplay = (result, page) => {
+    console.log("result getlisttodisplay", result)
     return result.filter(
       (x, index) => index >= page * 10 && index < (page + 1) * 10
     );
@@ -139,132 +151,134 @@ function App() {
   return (
     <div className="content">
       <Navbar bg="dark" className="d-flex">
-        <h3><img width="40" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png"/></h3>
+        <h3><img onClick={() => resetPage()} width="40" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" /></h3>
         <input className="inpux-box d-flex"
-            placeholder="Search here..."
-            onChange={(e) => (inputString = e.target.value)}
-          ></input>
-          <button style={{fontSize: "15px"}} onClick={() => getIssues()}>Search</button>
-          <button style={{fontSize: "15px"}} onClick={() => postNewIssue()}>
-                        New Issue
-                    </button>
+          placeholder="Search here..."
+          onChange={(e) => (inputString = e.target.value)}
+        ></input>
+        <button style={{ fontSize: "15px"}} onClick={() => getIssues()}>Search</button>
+        <button style={{ fontSize: "15px" }} onClick={() => postNewIssue()}>
+          New Issue
+        </button>
         <div>
-          
+
         </div>
-        
+
       </Navbar>
-      
+
       <Container className="issues-area">
         <ReactModal
-            className="video-popup-modal"
-            ariaHideApp={false}
-            isOpen={openModal}
-            onRequestClose={() => closeModal()}
-            closeTimeOutMS={2000}
-            shouldCloseOnOverlayClick={true}
-            style={{
-              overlay: {
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(255, 255, 255, 0.75)",
-              },
-              content: {
-                position: "absolute",
-                top: "40px",
-                left: "40px",
-                right: "40px",
-                bottom: "40px",
-                border: "1px solid #ccc",
-                background: "#fff",
-                overflow: "auto",
-                WebkitOverflowScrolling: "touch",
-                borderRadius: "4px",
-                outline: "none",
-                padding: "20px",
-              },
-            }}
-          >
-            <Button onClick={() => closeModal()}>x</Button>
+          className="video-popup-modal"
+          ariaHideApp={false}
+          isOpen={openModal}
+          onRequestClose={() => closeModal()}
+          closeTimeOutMS={2000}
+          shouldCloseOnOverlayClick={true}
+          style={{
+            overlay: {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.75)",
+            },
+            content: {
+              position: "absolute",
+              top: "40px",
+              left: "40px",
+              right: "40px",
+              bottom: "40px",
+              background: "#fff",
+              overflow: "auto",
+              WebkitOverflowScrolling: "touch",
+              borderRadius: "4px",
+              outline: "none",
+              padding: "20px",
+            },
+          }}
+        >
+          <Card>
+            <Card.Header as="h2">Create A Post</Card.Header>
             <div>
-              New Issue:{" "}
-              <input
-                type="text"
-    
-                placeholder="Title"
-                onChange={(e) => {
-                  newIssueTitle = e.target.value;
-                }}
-              ></input>
+              {showAlert ? (
+                <div>
+                  <Alert
+                    variant="danger"
+                    onClose={() => setShowAlert(false)}
+                    dismissible
+                  >
+                    <div>
+                      <p>
+                        Please fill in all the fields.
+                    </p>
+                    </div>
+                  </Alert>
+
+                </div>
+              ) : null}
+
+
+
             </div>
-            <div>Owner of Issue: {" "} 
-            <input
-                type="text"
-    
-                placeholder="Title"
-                onChange={(e) => {
-                  newIssueTitle = e.target.value;
-                }}></input>
-            </div>
-          
-            <div>
-              What's the Issue?{" "}
-            </div>
-            <div>
-              <textarea
-                placeholder="Leave a comment"
-                rows="7"
-                cols="100"
-                onChange={(e) => {
-                  newIssueBody = e.target.value;
-                }}
-              ></textarea>
-            </div>
-            
-            <div>
-              
-            </div>
+            <Card.Body>
+
+              <Card.Text>
+                <div className="title">
+
+                  <textarea
+                    rows="1"
+                    cols="180"
+                    type="text"
+                    placeholder="Title"
+                    onChange={(e) => {
+                      newIssueTitle = e.target.value;
+                    }}
+                  ></textarea>
+                </div>
+                <div>
+                  <textarea
+                    placeholder="Text (option)"
+                    rows="7"
+                    cols="180"
+                    onChange={(e) => {
+                      newIssueBody = e.target.value;
+                    }}
+                  ></textarea>
+                </div>
+
+              </Card.Text>
+              <div className="submit">
                 <Dropdown>
-                <Dropdown.Toggle id="dropdown-basic">
-                  Label
+                  <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                    Label
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-              
-                {labelList.map(item => {
-                    return (
-                      <Dropdown.Item href="#/action-1">{item.name}</Dropdown.Item>
+                  <Dropdown.Menu>
 
-                    )
-                  }
-                )}
-             
-                </Dropdown.Menu>
-              </Dropdown>
-            
-            <Button onClick={() => submitNewIssue()}>Submit new issue</Button>
-            {showAlert ? (
-              <div>
-                <Alert
-                  variant="danger"
-                  onClose={() => setShowAlert(false)}
-                  dismissible
-                >
-                  <Alert.Heading>Oh snap! Missing something?</Alert.Heading>
-                  <p>
-                    Please fill in all the fields.
-                  </p>
-                </Alert>
+                    {labelList.map(item => {
+                      return (
+                        <Dropdown.Item variant="dark" href="#/action-1">{item.name}</Dropdown.Item>
+
+                      )
+                    }
+                    )}
+
+                  </Dropdown.Menu>
+                </Dropdown>
+
+                <Button variant="dark" onClick={() => submitNewIssue()}>Submit new issue</Button>
+                <Button variant="secondary" onClick={() => closeModal()}>Cancel</Button>
               </div>
-            ) : null}
+            </Card.Body>
+          </Card>
+
         </ReactModal>
         {
-          issuesList.length == 0 ? <div className="loading"><img src="https://i.pinimg.com/originals/7c/2d/f0/7c2df083aab95b8415314351b5b0d6f4.gif"/></div> :
-          
-        
-        <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />}
+          issuesList.length == 0 ? <div className="loading"><img src="https://i.pinimg.com/originals/7c/2d/f0/7c2df083aab95b8415314351b5b0d6f4.gif" /><h2> ... Search Something</h2></div> :
+
+
+            <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />}
       </Container>
       <Navbar className="nav justify-content-center" expand="lg">
         <Pagination
@@ -274,19 +288,19 @@ function App() {
           theme="border-bottom"
         />
       </Navbar>
-      
+
       <HieuFooter />
-      
-      
-      
-     
 
 
 
-      
-     
-       
-      
+
+
+
+
+
+
+
+
     </div>
   );
 }
