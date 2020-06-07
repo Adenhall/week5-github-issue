@@ -8,12 +8,12 @@
 .issues-area {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+
 }
 
 .navbar{
   font-size: 20px;
-  height: 60px;
+  height: 55px;
 }
 
 h4{
@@ -42,10 +42,84 @@ h3 {
 }
 
 nav{
-    height:50px;
+    height: 60px;
 }
 
 .button{
-  background-color: transparent;
+background-color: transparent;
  margin-right: 2rem;
+ 
+}
+
+/* .input-box{
+  background-color: #404448;
+  border: 0px;
+  border-radius: 5px;
+  width: 250px;
+  outline: transparent;
+  color:white;
+} */
+
+input .modal{
+  border: 1px solid 
+}
+.inpux-box {
+  font-size: 15px;
+  padding: 5px;
+  background-color: #404448;
+  border: 0px;
+  border-radius: 5px;
+  width: 250px;
+  outline: transparent;
+  color:white;
+
+}
+
+
+button{
+  background-color: transparent;
+  color: white;
+  font-weight: bolder;
+  border: transparent;
+  outline: transparent;
+
+
+}
+
+::placeholder {
+  color: grey;
+  font-size: 15px;
+  align-items: center;
+ }
+
+.video-popup-modal{
+  margin: 20px;
+  height: 600px;
+ 
+}
+
+.footer{
+  position: sticky;
+  bottom: 0;
+  width: 100vw;
+}
+.image-container{
+   
+   display:flex;
+   justify-content: center;
+}
+
+.content{
+ 
+  height: 100vh;
+}
+
+.loading{
+  height: 80vh;
+  align-items: center;
+  display:flex;
+  justify-content: center;
+
+ 
+
 }

@@ -7,7 +7,9 @@ import ReactModal from "react-modal";
 import HieuFooter from "./components/Footer.js";
 import Navbar from "react-bootstrap/Navbar";
 import Pagination from "react-pagination-library";
+import Dropdown from 'react-bootstrap/Dropdown'
 import "react-pagination-library/build/css/index.css";
+
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 let newIssueTitle = "";
@@ -23,6 +25,8 @@ function App() {
   let [errorIssues, setErrorIssues] = useState(false);
   let [fullList, setFullList] = useState([]);
   let [showAlert, setShowAlert] = useState(false);
+
+  let [labelList, setLabelList] = useState([]);
 
   const getToken = () => {
     const existingToken = localStorage.getItem("token"); // if we already have token in our localstorage, just get that
@@ -70,7 +74,14 @@ function App() {
     console.log("result?", dataResult);
     setFullList(dataResult);
     setIssuesList(getListToDisplay(dataResult, 0));
-
+    let c = []
+    let b = dataResult.map(item=>{
+      console.log(item.labels)
+      c = c.concat(item.labels)
+      return item.labels
+    }) 
+    console.log("b is", c)
+    setLabelList(c)
     try {
     } catch (error) {}
 
@@ -122,103 +133,140 @@ function App() {
     let a = getListToDisplay(fullList, pageNumber - 1);
     setPageNumber(pageNumber);
     setIssuesList(a);
+
   };
 
   return (
-    <div>
-      <Navbar bg="dark" className="d-flex justify-content-between">
-        <h3>Github Issues</h3>
-        <div>
-          <input
+    <div className="content">
+      <Navbar bg="dark" className="d-flex">
+        <h3><img width="40" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png"/></h3>
+        <input className="inpux-box d-flex"
             placeholder="Search here..."
             onChange={(e) => (inputString = e.target.value)}
           ></input>
-          <Button style={{marginBottom: "5px"}} onClick={() => getIssues()}>search</Button>
+          <button style={{fontSize: "15px"}} onClick={() => getIssues()}>Search</button>
+          <button style={{fontSize: "15px"}} onClick={() => postNewIssue()}>
+                        New Issue
+                    </button>
+        <div>
+          
         </div>
         
       </Navbar>
+      
       <Container className="issues-area">
         <ReactModal
-          className="video-popup-modal"
-          ariaHideApp={false}
-          isOpen={openModal}
-          onRequestClose={() => closeModal()}
-          closeTimeOutMS={2000}
-          shouldCloseOnOverlayClick={true}
-          style={{
-            overlay: {
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(255, 255, 255, 0.75)",
-            },
-            content: {
-              position: "absolute",
-              top: "40px",
-              left: "40px",
-              right: "40px",
-              bottom: "40px",
-              border: "1px solid #ccc",
-              background: "#fff",
-              overflow: "auto",
-              WebkitOverflowScrolling: "touch",
-              borderRadius: "4px",
-              outline: "none",
-              padding: "20px",
-            },
-          }}
-        >
-          <Button onClick={() => closeModal()}>Close</Button>
-          <div>
-            New Issue:{" "}
-            <input
-              type="text"
-              placeholder="Title"
-              onChange={(e) => {
-                newIssueTitle = e.target.value;
-              }}
-            ></input>
-          </div>
-          <div>Owner of Issue: (get author of post here)</div>
-          <div>Owner Avatar</div>
-          <div>
-            What's the Issue?{" "}
-            <textarea
-              placeholder="Leave a comment"
-              rows="10"
-              cols="30"
-              onChange={(e) => {
-                newIssueBody = e.target.value;
-              }}
-            ></textarea>
-          </div>
-          <div>Label: (dropdown - select label)</div>
-          <div>State of Issue: (dropdown - select state)</div>
-          <Button onClick={() => submitNewIssue()}>Submit new issue</Button>
-          {showAlert ? (
+            className="video-popup-modal"
+            ariaHideApp={false}
+            isOpen={openModal}
+            onRequestClose={() => closeModal()}
+            closeTimeOutMS={2000}
+            shouldCloseOnOverlayClick={true}
+            style={{
+              overlay: {
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(255, 255, 255, 0.75)",
+              },
+              content: {
+                position: "absolute",
+                top: "40px",
+                left: "40px",
+                right: "40px",
+                bottom: "40px",
+                border: "1px solid #ccc",
+                background: "#fff",
+                overflow: "auto",
+                WebkitOverflowScrolling: "touch",
+                borderRadius: "4px",
+                outline: "none",
+                padding: "20px",
+              },
+            }}
+          >
+            <Button onClick={() => closeModal()}>x</Button>
             <div>
-              <Alert
-                variant="danger"
-                onClose={() => setShowAlert(false)}
-                dismissible
-              >
-                <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                <p>
-                  Change this and that and try again. Duis mollis, est non
-                  commodo luctus, nisi erat porttitor ligula, eget lacinia odio
-                  sem nec elit. Cras mattis consectetur purus sit amet
-                  fermentum.
-                </p>
-              </Alert>
+              New Issue:{" "}
+              <input
+                type="text"
+    
+                placeholder="Title"
+                onChange={(e) => {
+                  newIssueTitle = e.target.value;
+                }}
+              ></input>
             </div>
-          ) : null}
+            <div>Owner of Issue: {" "} 
+            <input
+                type="text"
+    
+                placeholder="Title"
+                onChange={(e) => {
+                  newIssueTitle = e.target.value;
+                }}></input>
+            </div>
+          
+            <div>
+              What's the Issue?{" "}
+            </div>
+            <div>
+              <textarea
+                placeholder="Leave a comment"
+                rows="7"
+                cols="100"
+                onChange={(e) => {
+                  newIssueBody = e.target.value;
+                }}
+              ></textarea>
+            </div>
+            
+            <div>
+              
+            </div>
+                <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic">
+                  Label
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+              
+                {labelList.map(item => {
+                    return (
+                      <Dropdown.Item href="#/action-1">{item.name}</Dropdown.Item>
+
+                    )
+                  }
+                )}
+             
+                </Dropdown.Menu>
+              </Dropdown>
+            
+            <Button onClick={() => submitNewIssue()}>Submit new issue</Button>
+            {showAlert ? (
+              <div>
+                <Alert
+                  variant="danger"
+                  onClose={() => setShowAlert(false)}
+                  dismissible
+                >
+                  <Alert.Heading>Oh snap! Missing something?</Alert.Heading>
+                  <p>
+                    Please fill in all the fields.
+                  </p>
+                </Alert>
+              </div>
+            ) : null}
         </ReactModal>
+        {
+          issuesList.length == 0 ? <div className="loading"><img src="https://i.pinimg.com/originals/7c/2d/f0/7c2df083aab95b8415314351b5b0d6f4.gif"/></div> :
+          
         
-        <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />
+        <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />}
       </Container>
-      <Navbar className="nav justify-content-center" bg="light" expand="sm" fixed="bottom">
+      <Navbar className="nav justify-content-center" expand="lg">
         <Pagination
           currentPage={pageNumber}
           totalPages={total}
@@ -226,9 +274,19 @@ function App() {
           theme="border-bottom"
         />
       </Navbar>
-      <div>
-        <HieuFooter />
-      </div>
+      
+      <HieuFooter />
+      
+      
+      
+     
+
+
+
+      
+     
+       
+      
     </div>
   );
 }
