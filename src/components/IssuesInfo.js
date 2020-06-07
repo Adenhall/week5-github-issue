@@ -3,7 +3,7 @@ import { Badge, Container, Row } from 'react-bootstrap';
 import moment from 'moment'
 import TitleModal from './TitleModal.js'
 import Button from "react-bootstrap/Button";
-
+import ReactMarkdown from 'react-markdown';
 
 
 export default function IssuesInfo(props) {
@@ -38,6 +38,7 @@ export default function IssuesInfo(props) {
                                 <div style={{margin: "10px 10px"}} className="d-flex flex-column align-items-end"><img src={item.user.avatar_url} width="40" height="40" /><div><b>State: {item.state.toUpperCase()}</b></div></div>
                                 
                             </div>
+                            <ReactMarkdown source={item.body} />
                             <TitleModal item={item} titleModalProps={titleModal} closeTitleModalProps={closeTitalModal}/>
                             </>
                     )
