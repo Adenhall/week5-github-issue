@@ -23,7 +23,7 @@ export default function IssuesInfo(props) {
                         <Card.Body>
                             <Card.Title>  <h4>Issue: {item.title}</h4> </Card.Title>
                             <Card.Text>
-                            With supporting text below as a natural lead-in to additional content.
+                           
                             </Card.Text>
                            
                         </Card.Body>
@@ -32,6 +32,7 @@ export default function IssuesInfo(props) {
                    
                     <div>Owner {item.user.login} <img src={item.user.avatar_url} width="50" height="50"/></div>
                     <Badge style={{"background-color":`#${item.labels[0].color}`}}>{item.labels[0].description}</Badge>
+                    <Badge >{item.labels[0].description}</Badge>
                  
                    
                     
