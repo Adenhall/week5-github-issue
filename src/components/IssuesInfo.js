@@ -37,8 +37,8 @@ export default function IssuesInfo(props) {
                                 </div>
                                 <div style={{margin: "10px 10px"}} className="d-flex flex-column align-items-end"><img src={item.user.avatar_url} width="40" height="40" /><div><b>State: {item.state.toUpperCase()}</b></div></div>
                                 
+                                <ReactMarkdown source={item.body} />
                             </div>
-                            <ReactMarkdown source={item.body} />
                             <TitleModal item={item} titleModalProps={titleModal} closeTitleModalProps={closeTitalModal}/>
                             </>
                     )
