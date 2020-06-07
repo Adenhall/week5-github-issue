@@ -28,13 +28,13 @@ export default function IssuesInfo(props) {
                         return (
                             <>
                             <div className="issueslist">
-                                <div onClick={() => openTitleModal()}><a href="#">Issue: {item.title}</a></div>
-
-                                <div>Issue #{item.number}</div>
-                                <div>Owner of Issue: {item.user.login} <img src={item.user.avatar_url} width="40" height="40" /></div>
-                                <div>Issue created on: {moment(item.created_at).startOf('day').fromNow()}</div>
-                                <div>Label {item.labels.map(label => <Badge pill variant="primary">{label.name}</Badge>)}</div>
-                                <div>State of Issue: {item.state}</div>
+                                <div>
+                                    <div onClick={() => openTitleModal()}><a href="#"><h2>Issue: {item.title}</h2></a></div>
+                                    <div>{item.labels.map(label => <Badge variant="primary" style={{backgroundColor:`#${label.color}`,color: "black"}}>{label.name}</Badge>)}</div>
+                                    <div><p>#{item.number} opened {moment(item.created_at).startOf('day').fromNow()} by {item.user.login}</p></div>
+                                </div>
+                                <div className="d-flex flex-column align-items-end"><img src={item.user.avatar_url} width="40" height="40" /><div><b>State of Issue: {item.state}</b></div></div>
+                                
                             </div>
                             <TitleModal item={item} titleModalProps={titleModal} closeTitleModalProps={closeTitalModal}/>
                             </>
