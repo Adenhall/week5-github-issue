@@ -18,7 +18,7 @@ http.createServer((req, res) => {
       }
     }, (err, r, body) => {
       res.writeHead(301, {
-        'Location': 'http://localhost:3000?' + body // client URL
+        'Location': 'https://localhost:3000?' + body // client URL
       });
       res.end();
     })
