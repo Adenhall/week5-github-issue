@@ -29,7 +29,7 @@ export default function IssuesInfo(props) {
                             <>
                             <div className="issueslist">
                                 <div>
-                                    <div onClick={() => openTitleModal()}><a href="#"><h2>Issue: {item.title}</h2></a></div>
+                                    <div onClick={() => openTitleModal()}><a className="issue-title" href="#"><h4>Issue: {item.title}</h4></a></div>
                                     <div>{item.labels.map(label => <Badge variant="primary" style={{backgroundColor:`#${label.color}`,color: "black"}}>{label.name}</Badge>)}</div>
                                     <div><p>#{item.number} opened {moment(item.created_at).startOf('day').fromNow()} by {item.user.login}</p></div>
                                 </div>

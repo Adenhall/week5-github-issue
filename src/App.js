@@ -223,7 +223,7 @@ function App() {
           currentPage={pageNumber}
           totalPages={total}
           changeCurrentPage={changeCurrentPage}
-          theme="bottom-border"
+          theme="border-bottom"
         />
       </Navbar>
       <div>
