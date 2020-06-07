@@ -6,6 +6,8 @@ import Button from "react-bootstrap/Button";
 import ReactMarkdown from 'react-markdown';
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
 
 
 export default function IssuesInfo(props) {
@@ -33,7 +35,21 @@ export default function IssuesInfo(props) {
             
                             <div className="issueslist">
                                 <div style={{marginLeft: "10px"}}>
-                                    <div onClick={() => openTitleModal()}><h4><a className="issue-title" href="#"><i class="fas fa-exclamation-circle" style={{margin: "10px 10px 10px 0px"}}></i>Issue: {item.title}</a></h4></div>
+                                    <OverlayTrigger
+                                        trigger="hover"
+                                        key={item}
+                                        placement="top"
+                                        overlay={
+                                            <Popover id={`popover-positioned-top`}>
+                                            <Popover.Title style={{color: "black"}} as="h3">facebook/react on {item.created_at}</Popover.Title>
+                                            <Popover.Content>
+                                                <strong>{item.labels.map(x => {return(<div>{x.description}</div>)})}</strong>
+                                            </Popover.Content>
+                                            </Popover>
+                                        }
+                                        >
+                                        <div onClick={() => openTitleModal()}><h4><a className="issue-title" href="#"><i class="fas fa-exclamation-circle" style={{margin: "10px 10px 10px 0px"}}></i>Issue: {item.title}</a></h4></div>
+                                    </OverlayTrigger>
                                     <div>{item.labels.map(label => <Badge variant="primary" style={{backgroundColor:`#${label.color}`,color: "black"}}>{label.name}</Badge>)}</div>
                                     <div><p>#{item.number}
                                     <div></div> {moment(item.created_at).startOf('day').fromNow()} by {item.user.login}</p></div>
