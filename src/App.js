@@ -78,6 +78,7 @@ function App() {
     let dataResult = await data.json();
     console.log("result?", dataResult);
     setFullList(dataResult);
+    
     if (dataResult.message == "Not Found") {
       setIssuesList([])
       alert("No Data Found")
@@ -99,6 +100,7 @@ function App() {
       }
       setTotalPages(dataResult.length / 10);
     }
+    if (owner === undefined || repo === undefined) setIssuesList(["Error 404"])
 
   }; // this is how to get the data
 
@@ -113,16 +115,20 @@ function App() {
     setOpenModal(false);
   };
 
-  const submitNewIssue = async () => {
-    const issue = { title: { newIssueTitle }, body: { newIssueBody } };
+  const submitNewIssue = async (owner, repo) => {
+    let issue = { title: newIssueTitle, body: newIssueBody };
     if (newIssueTitle.length === 0 || newIssueBody.length === 0) {
       setShowAlert(true);
       return;
     }
 
+    let tempArray = inputString.split("/");
+    owner = tempArray[0];
+    repo = tempArray[1];
+
     // const issue = { title: newIssueTitle, body: newIssueBody }; // made this as object type to change to json
     console.log(issue);
-    const url = `https://api.github.com/repos/christinapbui/GithubIssues/issues`;
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -278,7 +284,7 @@ function App() {
           issuesList.length == 0 ? <div className="loading"><img src="https://i.pinimg.com/originals/7c/2d/f0/7c2df083aab95b8415314351b5b0d6f4.gif" /><h2> ... Search Something</h2></div> :
 
 
-            <IssuesInfo issuesListProps={issuesList} getIssuesProps={getIssues} postNewIssue={postNewIssue} />}
+            <IssuesInfo issuesListProps={issuesList} inputString={inputString} getIssuesProps={getIssues} postNewIssue={postNewIssue} />}
       </Container>
       <Navbar className="nav justify-content-center" expand="lg">
         <Pagination
