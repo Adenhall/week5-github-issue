@@ -41,7 +41,7 @@ export default function IssuesInfo(props) {
                                         placement="top"
                                         overlay={
                                             <Popover id={`popover-positioned-top`}>
-                                            <Popover.Title style={{color: "black"}} as="h3">facebook/react on {item.created_at}</Popover.Title>
+                                            <Popover.Title style={{color: "black"}} as="h3">{props.inputString} on {item.created_at}</Popover.Title>
                                             <Popover.Content>
                                                 <strong>{item.labels.map(x => {return(<div>{x.description}</div>)})}</strong>
                                             </Popover.Content>
@@ -52,7 +52,7 @@ export default function IssuesInfo(props) {
                                     </OverlayTrigger>
                                     <div>{item.labels.map(label => <Badge variant="primary" style={{backgroundColor:`#${label.color}`,color: "black"}}>{label.name}</Badge>)}</div>
                                     <div><p>#{item.number}
-                                    <div></div> {moment(item.created_at).startOf('day').fromNow()} by {item.user.login}</p></div>
+                                    <div></div> {moment(item.created_at).startOf('hour').fromNow()} by {item.user.login}</p></div>
                                 </div>
                                 <div style={{margin: "10px 10px"}} className="d-flex flex-column align-items-end"><img src={item.user.avatar_url} width="40" height="40" /><div><b>State: {item.state.toUpperCase()}</b></div></div>
                                
