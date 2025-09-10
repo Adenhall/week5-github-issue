@@ -15,7 +15,7 @@
     "react-modal": "^3.11.2",
     "react-moment": "^0.9.7",
     "react-pagination-library": "^0.1.14",
-    "react-scripts": "3.4.1"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "set HTTPS = true && react-scripts start",
